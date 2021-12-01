@@ -6,14 +6,18 @@ services:
       context: ./services/web
       dockerfile: Dockerfile.prod
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; gunicorn --bind 0.0.0.0:5000 manage:app'
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=production
       - DATABASE_URL=postgresql://hello_flask:hello_flask@db:5432/hello_flask_prod
     depends_on:
       - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flaskprod.rule=Host(`${FLASK_URL_PROD}`)"
+
   db:
     image: postgres:13-alpine
     volumes:
@@ -22,3 +26,8 @@ services:
       - POSTGRES_USER=hello_flask
       - POSTGRES_PASSWORD=hello_flask
       - POSTGRES_DB=hello_flask_prod
+
+networks:
+  default:
+    external:
+      name: "${INETHI_NETWORK}"
