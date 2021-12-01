@@ -3,7 +3,11 @@ A basic flask API scaffold for development and production environments using Tra
 
 ## How to Use
 ### Production Environment
-1. Run the following command from the root folder:
+1. Run the following command from the traefik folder:
+```
+docker-compouse up -d
+```
+2. Run the following command from the root folder:
 ```
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
@@ -11,7 +15,11 @@ Note that in the production build we use a Docker multi-stage build to reduce th
 It is also important to note that we create a non-root user in this dockerfile.
 
 ### Development Environment
-1. Run the following command from the root folder:
+1. Run the following command from the traefik folder:
+```
+docker-compouse up -d
+```
+2. Run the following command from the root folder:
 ```
 docker-compose up -d --build
 ```
