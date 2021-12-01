@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.4
+    container_name: inethi-traefik-toml
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "${TOML_FILE}:/etc/traefik/traefik.toml"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_API_RULE}`)"
+      - "traefik.http.routers.dashboard.service=${TRAEFIK_API_SERVICE}"
+      - "traefik.http.routers.dashboard.entrypoints=${TRAEFIK_API_ENTRYPOINT}"
+
+networks:
+  default:
+    external:
+      name: "${INETHI_NETWORK}"
